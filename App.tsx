@@ -9,7 +9,10 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper'
 
 const Stack = createStackNavigator()
 
-const theme = {...DefaultTheme}
+const theme = {
+  ...DefaultTheme,
+  colors: {...DefaultTheme.colors, primary: '#171717'},
+}
 
 function App() {
   return (
