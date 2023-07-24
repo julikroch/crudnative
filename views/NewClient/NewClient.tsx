@@ -1,8 +1,7 @@
-import React, {useState} from 'react'
-import {View} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {Platform, View} from 'react-native'
 import {
   Button,
-  DefaultTheme,
   Dialog,
   Headline,
   Paragraph,
@@ -10,23 +9,69 @@ import {
   TextInput,
 } from 'react-native-paper'
 import {theme} from '../../App'
+import axios from 'axios'
 import globalStyles from '../../styles/global'
 import styles from './styles'
 
-const NewClient = () => {
+const NewClient = ({navigation, route}) => {
+  const {setCheckApi} = route.params
+
   const [name, setName] = useState('')
   const [mail, setMail] = useState('')
   const [phone, setPhone] = useState('')
   const [company, setCompany] = useState('')
   const [alert, setAlert] = useState(false)
 
-  const handlePress = () => {
+  const handlePress = async () => {
     const values = [name, mail, phone, company]
 
     if (values.some(val => val.trim() === '')) {
       setAlert(true)
     }
+
+    try {
+      const client = {name, mail, phone, company}
+
+      if (route.params.client) {
+        const {id} = route.params.client
+        const url =
+          Platform.OS === 'ios'
+            ? `http://localhost:3000/clients/${id}`
+            : `http://10.0.0.2:3000/clients/${id}`
+        await axios.put(url, client)
+      } else {
+        await axios.post(
+          `${
+            Platform.OS === 'ios'
+              ? 'http://localhost:3000/clients'
+              : 'http://10.0.0.2:3000/clients'
+          }`,
+          client,
+        )
+      }
+
+      navigation.navigate('Home')
+
+      setCompany('')
+      setMail('')
+      setName('')
+      setPhone('')
+      setCheckApi(true)
+    } catch (err) {
+      console.error(err)
+    }
   }
+
+  useEffect(() => {
+    if (route.params.client) {
+      const {name, phone, company, mail} = route.params.client
+
+      setCompany(company)
+      setMail(mail)
+      setName(name)
+      setPhone(phone)
+    }
+  }, [])
 
   return (
     <View style={globalStyles.container}>

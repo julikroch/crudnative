@@ -6,9 +6,9 @@ import {
 } from 'react-native-paper'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import Home from './views/Home'
+import Home from './views/Home/Home'
 import NewClient from './views/NewClient/NewClient'
-import ClientDetails from './views/ClientDetails'
+import ClientDetails from './views/ClientDetails/ClientDetails'
 import Navbar from './components/Navbar'
 
 const Stack = createStackNavigator()
