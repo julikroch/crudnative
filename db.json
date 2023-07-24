@@ -1,3 +1,11 @@
 {
-  "clients": []
+  "clients": [
+    {
+      "name": "Julian",
+      "mail": "Mail@mail.com",
+      "phone": "5491382983192",
+      "company": "Aplle",
+      "id": 1
+    }
+  ]
 }

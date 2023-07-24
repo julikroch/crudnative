@@ -25,33 +25,29 @@ const NewClient = ({navigation, route}) => {
   const handlePress = async () => {
     const values = [name, mail, phone, company]
 
+    const baseAPIURL =
+      Platform.OS === 'ios'
+        ? 'http://localhost:3000/clients'
+        : 'http://10.0.0.2:3000/clients'
+
     if (values.some(val => val.trim() === '')) {
       setAlert(true)
+      return
     }
 
     try {
-      const client = {name, mail, phone, company}
+      const clientData = {name, mail, phone, company}
+      const apiUrl = route.params.client
+        ? `${baseAPIURL}/${route.params.client.id}`
+        : baseAPIURL
 
       if (route.params.client) {
-        const {id} = route.params.client
-        const url =
-          Platform.OS === 'ios'
-            ? `http://localhost:3000/clients/${id}`
-            : `http://10.0.0.2:3000/clients/${id}`
-        await axios.put(url, client)
+        await axios.put(apiUrl, clientData)
       } else {
-        await axios.post(
-          `${
-            Platform.OS === 'ios'
-              ? 'http://localhost:3000/clients'
-              : 'http://10.0.0.2:3000/clients'
-          }`,
-          client,
-        )
+        await axios.post(apiUrl, clientData)
       }
 
       navigation.navigate('Home')
-
       setCompany('')
       setMail('')
       setName('')
